@@ -1,27 +1,33 @@
 ---
-const namespace = 'davidkano-portfolio'; // cámbialo si quieres
-const key = 'home';                      // usa un key por página (ej: "projects", "about")
-const endpoint = `https://api.countapi.xyz/hit/${namespace}/${key}`;
+// Componente contador de visitas (Astro)
 ---
-
-<div class="inline-flex items-center gap-2 text-sm text-gray-300">
+<span class="visit-counter">
   <span>👀 Visitas:</span>
-  <strong id="visit-count">—</strong>
-</div>
+  <strong data-counter>—</strong>
+</span>
 
 <script is:inline>
   (async () => {
+    const el = document.querySelector('.visit-counter [data-counter]');
     try {
-      const res = await fetch("<?= endpoint ?>");
+      // Cambia los dos últimos segmentos si quieres separar páginas: p.ej. "portfolio/home"
+      const res = await fetch('https://api.countapi.xyz/hit/davidcano-portfolio/home');
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
-      const el = document.getElementById('visit-count');
-      if (el && typeof data?.value === 'number') {
-        el.textContent = data.value.toLocaleString();
-      }
-    } catch(e) {
-      // opcional: ocultar si falla
-      const el = document.getElementById('visit-count');
-      if (el) el.textContent = '—';
+      const value = typeof data.value === 'number' ? data.value : 0;
+      el.textContent = value.toLocaleString();
+      localStorage.setItem('vc-home', String(value));
+    } catch (err) {
+      // Fallback: último valor guardado o 1
+      const prev = Number(localStorage.getItem('vc-home') || '1');
+      el.textContent = prev.toLocaleString();
     }
   })();
 </script>
+
+<style>
+  .visit-counter{
+    display:inline-flex; align-items:center; gap:.35rem; font-size:.95rem; opacity:.9;
+  }
+</style>
+
