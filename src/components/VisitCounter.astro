@@ -1,0 +1,27 @@
+---
+const namespace = 'davidkano-portfolio'; // cámbialo si quieres
+const key = 'home';                      // usa un key por página (ej: "projects", "about")
+const endpoint = `https://api.countapi.xyz/hit/${namespace}/${key}`;
+---
+
+<div class="inline-flex items-center gap-2 text-sm text-gray-300">
+  <span>👀 Visitas:</span>
+  <strong id="visit-count">—</strong>
+</div>
+
+<script is:inline>
+  (async () => {
+    try {
+      const res = await fetch("<?= endpoint ?>");
+      const data = await res.json();
+      const el = document.getElementById('visit-count');
+      if (el && typeof data?.value === 'number') {
+        el.textContent = data.value.toLocaleString();
+      }
+    } catch(e) {
+      // opcional: ocultar si falla
+      const el = document.getElementById('visit-count');
+      if (el) el.textContent = '—';
+    }
+  })();
+</script>
