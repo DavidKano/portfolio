@@ -1,0 +1,6 @@
+/*
+  Content-Security-Policy: default-src 'self';
+    img-src 'self' data: https://hits.seeyoufarm.com https://profile-counter.glitch.me;
+    connect-src 'self' https://api.countapi.xyz;
+    script-src 'self' 'unsafe-inline';
+    style-src 'self' 'unsafe-inline';

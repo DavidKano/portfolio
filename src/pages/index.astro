@@ -42,13 +42,23 @@ import VisitCounter from '../components/VisitCounter.astro';
   <Certificaciones/>
   <Projects />
   <TechStack />
-  <div style="display:flex;align-items:center;gap:.5rem">
+ <div style="display:flex;align-items:center;gap:.5rem">
   <span>👀 Visitas:</span>
-  <img 
-    src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fdavidkano.netlify.app%2F&count_bg=%230E7AFE&title_bg=%23000000&icon=&icon_color=%23E7E7E7&title=Visitas&edge_flat=false" 
-    alt="Contador de visitas"
-  />
+  <strong id="visit-count">—</strong>
   </div>
+  <script>
+    (async () => {
+    try {
+      const res = await fetch('https://api.countapi.xyz/hit/davidkano-portfolio/home', { cache: 'no-store' });
+      const data = await res.json();
+      document.getElementById('visit-count').textContent =
+        (data.value ?? data.count ?? 0).toLocaleString();
+    } catch (e) {
+      document.getElementById('visit-count').textContent = '—';
+    }
+    })();
+  </script>
+
   <Contacto />
   <Footer />
 
