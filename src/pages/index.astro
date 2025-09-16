@@ -42,22 +42,12 @@ import VisitCounter from '../components/VisitCounter.astro';
   <Certificaciones/>
   <Projects />
   <TechStack />
- <div style="display:flex;align-items:center;gap:.5rem">
-  <span>👀 Visitas:</span>
-  <strong id="visit-count">—</strong>
-  </div>
-  <script>
-    (async () => {
-    try {
-      const res = await fetch('https://api.countapi.xyz/hit/davidkano-portfolio/home', { cache: 'no-store' });
-      const data = await res.json();
-      document.getElementById('visit-count').textContent =
-        (data.value ?? data.count ?? 0).toLocaleString();
-    } catch (e) {
-      document.getElementById('visit-count').textContent = '—';
-    }
-    })();
-  </script>
+
+
+<!-- al final del <body> -->
+<script src="/js/visit.js" defer></script>
+ .visit-counter { display:flex; align-items:center; gap:.5rem; }
+
 
   <Contacto />
   <Footer />

@@ -1,14 +1,8 @@
 ---
-const id = Astro.props?.id || 'davidkano-portfolio-home'; // cambia el id si quieres separar páginas
-const label = Astro.props?.label || 'Visitas';
+const NAMESPACE = "davidkano-portfolio";
+const KEY = "home"; // cambia por "projects", "podocita-web", etc. si quieres contadores por página
 ---
-<div style="display:flex;align-items:center;gap:.5rem">
-  <span>👀 {label}:</span>
-  <img
-    src={`https://profile-counter.glitch.me/${encodeURIComponent(id)}/count.svg`}
-    alt="Contador de visitas"
-    style="height:20px"
-    loading="eager"
-    decoding="async"
-  />
+<div class="visit-counter">
+  <span>👀 Visitas:</span>
+  <strong id="visit-count">—</strong>
 </div>
