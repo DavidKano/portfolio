@@ -1,33 +1,31 @@
 ---
-// Componente contador de visitas (Astro)
+/**
+ * Contador de visitas con CountAPI (sin backend propio).
+ * Cambia NAMESPACE si quieres “resetear” el contador.
+ * Usa un KEY por página si quieres contadores separados.
+ */
+const NAMESPACE = 'davidkano-portfolio'; // solo letras, números y guiones
+const KEY = 'home';                       // usa 'home', 'projects', etc.
 ---
-<span class="visit-counter">
+<div class="inline-flex items-center gap-2 text-sm text-gray-300">
   <span>👀 Visitas:</span>
-  <strong data-counter>—</strong>
-</span>
+  <strong id="visit-count">—</strong>
+</div>
 
 <script is:inline>
-  (async () => {
-    const el = document.querySelector('.visit-counter [data-counter]');
-    try {
-      // Cambia los dos últimos segmentos si quieres separar páginas: p.ej. "portfolio/home"
-      const res = await fetch('https://api.countapi.xyz/hit/davidcano-portfolio/home');
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      const value = typeof data.value === 'number' ? data.value : 0;
-      el.textContent = value.toLocaleString();
-      localStorage.setItem('vc-home', String(value));
-    } catch (err) {
-      // Fallback: último valor guardado o 1
-      const prev = Number(localStorage.getItem('vc-home') || '1');
-      el.textContent = prev.toLocaleString();
-    }
-  })();
+(async () => {
+  const url = `https://api.countapi.xyz/hit/${encodeURIComponent("${NAMESPACE}")}/${encodeURIComponent("${KEY}")}`;
+  try {
+    const res = await fetch(url, { cache: 'no-store' }); // evita cache del navegador/CDN
+    const data = await res.json();
+    const value = (typeof data.value === 'number') ? data.value : (data.count ?? 0);
+    const el = document.getElementById('visit-count');
+    if (el) el.textContent = value.toLocaleString();
+  } catch (e) {
+    const el = document.getElementById('visit-count');
+    if (el) el.textContent = '—';
+  }
+})();
 </script>
 
-<style>
-  .visit-counter{
-    display:inline-flex; align-items:center; gap:.35rem; font-size:.95rem; opacity:.9;
-  }
-</style>
 
