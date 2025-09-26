@@ -27,3 +27,99 @@ html {
   }
 }
  .visit-counter { display:flex; align-items:center; gap:.5rem; }
+
+ /* Fondo estilo wallpaper y cristal (v1) */
+.desktop-wallpaper {
+background: radial-gradient(1200px 600px at 80% 20%, rgba(59,130,246,.15), transparent),
+radial-gradient(800px 500px at 20% 80%, rgba(34,197,94,.12), transparent),
+linear-gradient(180deg, #0b0f1a, #0b0f1a 60%, #0a0d14);
+}
+
+/* Tipografía similar a Windows */
+:root { --ui-font: "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; }
+html, body { font-family: var(--ui-font); }
+
+
+/* Fondo: imagen + ligero vignette */
+.desktop-wallpaper {
+background: #0b0f1a url('/wallpapers/win11.jpg') center/cover no-repeat fixed;
+}
+.desktop-vignette::before {
+content: ""; position: absolute; inset: 0; pointer-events: none;
+background: radial-gradient(1200px 600px at 50% 10%, rgba(255,255,255,.04), transparent),
+radial-gradient(800px 400px at 10% 90%, rgba(0,0,0,.25), transparent),
+radial-gradient(800px 400px at 90% 90%, rgba(0,0,0,.25), transparent);
+}
+
+
+/* Icono estilo Windows: etiqueta con sombra 
+.win-icon-label { text-shadow: 0 1px 2px rgba(0,0,0,.8); }*/
+/* Etiqueta tipo Windows con mejor contraste sobre fotos claras */
+.win-icon-label{
+  background: rgba(0,0,0,.55);
+  border-radius: 8px;
+  padding: 3px 8px;
+  text-shadow: 0 1px 2px rgba(0,0,0,.9);
+}
+.win-icon-tile{
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+  color: #fff; /* currentColor -> blanco */
+}
+
+
+
+/* Barra de tareas estilo acrílico */
+.taskbar {
+backdrop-filter: saturate(140%) blur(16px);
+-webkit-backdrop-filter: saturate(140%) blur(16px);
+background: rgba(20,20,20,.55);
+border-top: 1px solid rgba(255,255,255,.08);
+}
+.startmenu {
+backdrop-filter: blur(24px) saturate(160%);
+-webkit-backdrop-filter: blur(24px) saturate(160%);
+background: rgba(28,28,28,.7);
+border: 1px solid rgba(255,255,255,.08);
+}
+
+
+/* Ventanas */
+.win { transition: box-shadow .15s ease; }
+.win.is-active { box-shadow: 0 12px 40px rgba(0,0,0,.5); }
+.win-header { cursor: grab; user-select: none; touch-action: none; }
+.win-header:active { cursor: grabbing; }
+.win.maximized { inset: 0.75rem !important; width: auto !important; height: auto !important; transform: none !important; }
+
+/* Asas de resize (grandes) */
+.win .resize-handle { position: absolute; background: transparent; z-index: 5; }
+.win .rh-n  { top:-10px; left:-6px; right:-6px; height:16px; cursor:n-resize; }
+.win .rh-s  { bottom:-10px; left:-6px; right:-6px; height:16px; cursor:s-resize; }
+.win .rh-e  { top:-6px; right:-10px; width:16px; bottom:-6px; cursor:e-resize; }
+.win .rh-w  { top:-6px; left:-10px; width:16px; bottom:-6px; cursor:w-resize; }
+.win .rh-ne { top:-12px; right:-12px; width:24px; height:24px; cursor:ne-resize; }
+.win .rh-nw { top:-12px; left:-12px; width:24px; height:24px; cursor:nw-resize; }
+.win .rh-se { bottom:-12px; right:-12px; width:24px; height:24px; cursor:se-resize; }
+.win .rh-sw { bottom:-12px; left:-12px; width:24px; height:24px; cursor:sw-resize; }
+
+/* Snap preview */
+.win-snap-preview { position: fixed; inset: 0; pointer-events: none; z-index: 30; }
+.win-snap-preview > div { position: absolute; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: 16px; }
+
+
+
+/* Taskbar: botón activo */
+.taskbar button.is-open { background: rgba(255,255,255,.12); }
+
+/* Reloj: ancho fijo y dígitos tabulares para que no refluya */
+.clock {
+  display: inline-block;
+  width: 8ch;            /* HH:mm:ss = 8 */
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+#welcome-modal { opacity: 0; transform: translate(-50%,-55%); transition: opacity .18s ease, transform .18s ease; }
+#welcome-overlay { opacity: 0; transition: opacity .18s ease; }
+#welcome-overlay:not(.hidden) { opacity: 1; }
+#welcome-modal:not(.hidden) { opacity: 1; transform: translate(-50%,-50%); }

@@ -1,53 +1,58 @@
 ---
-// src/pages/index.astro
-import Layout from '../layouts/Layout.astro';
-import Projects from '../components/Projects.astro';
-import TechStack from '../components/TechStack.astro';
-import Contacto from '../components/Contacto.astro';
-import Footer from '../components/Footerbis.astro';
-import Certificaciones from '../components/Certificaciones.astro';
-import VisitCounter from '../components/VisitCounter.astro';
+import DesktopLayout from "../layouts/DesktopLayout.astro";
+import DesktopIcon from "../components/desktop/DesktopIcon.astro";
+import DesktopWindow from "../components/desktop/DesktopWindow.astro";
 
-
-
+// Reutilizamos tus componentes existentes
+import Projects from "../components/Projects.astro";
+import TechStack from "../components/TechStack.astro";
+import Contacto from "../components/Contacto.astro";
+import Certificaciones from "../components/Certificaciones.astro";
 ---
+<DesktopLayout title="David Cano | Escritorio">
 
-<Layout title="David Cano | Desarrollador Full Stack">
-<section class="min-h-screen flex-col justify-center items-center text-center bg-gradient-to-br from-gray-900 to-gray-800 text-white flex">
-  <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4">HOLA, soy David Cano</h1>
-  
-  <p class="text-lg sm:text-xl max-w-xl mb-6 px-4">
-    Desarrollador Android y Unity Full Stack. Apasionado por la tecnología, el desarrollo de soluciones reales y la mejora continua.
-  </p>
+<!-- Iconos en dos columnas; sin Mi PC ni Papelera -->
+<section class="pt-20 px-5 md:pt-24 pb-[72px]">
+  <div class="grid grid-cols-2 gap-y-6 gap-x-8 w-[min(520px,95vw)]">
+    <DesktopIcon label="Papelera de reciclaje" kind="bin" img="/icons/papelera.png" />
+    <DesktopIcon label="Mi PC" kind="pc" img="/icons/PC.png"  />
+    <DesktopIcon id="proyectos" label="Proyectos" kind="folder" img="/icons/proyectos.png" />
+    <DesktopIcon id="tech" label="Tecnologías" kind="code" img="/icons/codificacion.png"/>
+    <DesktopIcon id="certs" label="Certificaciones" kind="cert" img="/icons/certificacion.png" />
+    <DesktopIcon id="contacto" label="Contacto" kind="mail" />
 
-  <div class="flex flex-wrap gap-4 justify-center">
-    <a href="mailto:davidkano@hotmail.es" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">✉️ Email</a>
-    <a href="https://github.com/DavidKano" class="bg-gray-800 hover:bg-black text-white px-4 py-2 rounded-lg transition">💻 GitHub</a>
-    <a href="https://www.linkedin.com/in/david-cano-jaramillo-6bb1b017b/" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">💼 LinkedIn</a>
-    <a href="/cv-davidcano.pdf" class="bg-white hover:bg-gray-200 text-blue-600 px-4 py-2 rounded-lg transition">🗂️ Descargar CV</a>
-  </div>
+    <!-- CV -->
+    <DesktopIcon label="CV (PDF)" kind="pdf" href="/cv-davidcano.pdf" target="_blank" img="/icons/cv.png" />
 
-  <p class="mt-4 text-sm">Disponible para trabajar 🚀</p>
-
-  <!-- Flecha animada para hacer scroll -->
-  <div class="flex justify-center mt-10 animate-bounce">
-    <a href="#proyectos" aria-label="Ver más">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    <!-- GitHub con icono ORIGINAL (slot) -->
+    <DesktopIcon label="GitHub" href="https://github.com/DavidKano" target="_blank"  img="/icons/github.png">
+      <svg slot="icon" viewBox="0 0 16 16" class="w-8 h-8" aria-hidden="true">
+        <path fill="currentColor" d="M8 .2a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.32c-2.25.49-2.72-1.08-2.72-1.08c-.37-.93-.9-1.18-.9-1.18c-.74-.5.06-.49.06-.49c.82.06 1.25.85 1.25.85c.73 1.25 1.92.89 2.39.68c.07-.53.28-.9.5-1.11c-1.8-.2-3.69-.9-3.69-4a3.1 3.1 0 0 1 .83-2.16c-.08-.2-.36-1.01.08-2.1c0 0 .68-.22 2.22.83a7.63 7.63 0 0 1 4.04 0c1.54-1.05 2.22-.83 2.22-.83c.44 1.09.16 1.9.08 2.1c.52.57.83 1.31.83 2.16c0 3.11-1.9 3.8-3.71 4c.29.25.55.75.55 1.52v2.25c0 .21.14.46.55.38A8 8 0 0 0 8 .2Z"/>
       </svg>
-    </a>
+    </DesktopIcon>
+
+    <!-- Google Play (puedes cambiar href) -->
+    <DesktopIcon id="google" label="Google Play" href="https://play.google.com/store/apps/developer?id=David+Cano&hl=es"  img="/icons/jugar.png" />
   </div>
 </section>
 
-  <Certificaciones/>
-  <Projects />
-  <TechStack />
+  
 
+  <!-- Ventanas (modales) -->
+  <DesktopWindow id="proyectos" title="Proyectos" wide>
+    <Projects />
+  </DesktopWindow>
 
+  <DesktopWindow id="tech" title="Tecnologías">
+    <TechStack />
+  </DesktopWindow>
 
+  <DesktopWindow id="certs" title="Certificaciones">
+    <Certificaciones />
+  </DesktopWindow>
 
-  <Contacto />
-  <Footer />
+  <DesktopWindow id="contacto" title="Contacto">
+    <Contacto />
+  </DesktopWindow>
 
-
-</Layout>
+</DesktopLayout>

@@ -1,0 +1,35 @@
+---
+export interface Props { id: string; title: string; wide?: boolean }
+const { id, title, wide = false } = Astro.props;
+---
+<section
+  id={id}
+  data-win
+  role="dialog" aria-modal="true" aria-labelledby={`${id}-title`}
+  class="win fixed bg-neutral-900/90 backdrop-blur border border-white/10 shadow-2xl rounded-2xl hidden"
+  style="left: 6rem; top: 5rem; width: 760px; max-width: min(95vw, 960px); height: 520px; max-height: calc(100dvh - 6rem);"
+>
+  <header class="win-header h-11 px-3 flex items-center justify-between border-b border-white/10 rounded-t-2xl bg-white/5">
+    <div class="flex items-center gap-2">
+      <button class="w-3 h-3 rounded-full bg-red-500/80" data-close={id} title="Cerrar"></button>
+      <button class="w-3 h-3 rounded-full bg-yellow-500/80" data-win-minimize={id} title="Minimizar"></button>
+      <button class="w-3 h-3 rounded-full bg-green-500/80" data-win-maximize={id} title="Maximizar"></button>
+      <h2 id={`${id}-title`} class="ml-3 text-sm md:text-base font-semibold opacity-90 select-none">{title}</h2>
+    </div>
+    <button class="px-2 py-1 text-sm bg-white/10 hover:bg-white/20 rounded" data-close={id} aria-label="Cerrar">✖</button>
+  </header>
+
+  <div class="p-4 md:p-6 overflow-auto h-[calc(100%-2.75rem)]">
+    <slot />
+  </div>
+
+  <!-- asas de resize -->
+  <div class="resize-handle rh-n"></div>
+  <div class="resize-handle rh-s"></div>
+  <div class="resize-handle rh-e"></div>
+  <div class="resize-handle rh-w"></div>
+  <div class="resize-handle rh-ne"></div>
+  <div class="resize-handle rh-nw"></div>
+  <div class="resize-handle rh-se"></div>
+  <div class="resize-handle rh-sw"></div>
+</section>
