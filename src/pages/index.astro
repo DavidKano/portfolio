@@ -8,6 +8,8 @@ import Projects from "../components/Projects.astro";
 import TechStack from "../components/TechStack.astro";
 import Contacto from "../components/Contacto.astro";
 import Certificaciones from "../components/Certificaciones.astro";
+import MusicPlayer from "../components/MusicPlayer.astro";
+
 ---
 <DesktopLayout title="David Cano | Escritorio">
 
@@ -21,6 +23,7 @@ import Certificaciones from "../components/Certificaciones.astro";
     <DesktopIcon id="certs" label="Certificaciones" kind="cert" img="/icons/certificacion.png" />
     <DesktopIcon id="contacto" label="Contacto" kind="mail" />
 
+
     <!-- CV -->
     <DesktopIcon label="CV (PDF)" kind="pdf" href="/cv-davidcano.pdf" target="_blank" img="/icons/cv.png" />
 
@@ -33,7 +36,12 @@ import Certificaciones from "../components/Certificaciones.astro";
 
     <!-- Google Play (puedes cambiar href) -->
     <DesktopIcon id="google" label="Google Play" href="https://play.google.com/store/apps/developer?id=David+Cano&hl=es"  img="/icons/jugar.png" />
+
+     <!-- Icono estilo escritorio -->
+    <DesktopIcon id="music" label="Música" kind="app" img="/icons/music.png" />
+
   </div>
+
 </section>
 
   
@@ -42,6 +50,14 @@ import Certificaciones from "../components/Certificaciones.astro";
   <DesktopWindow id="proyectos" title="Proyectos" wide>
     <Projects />
   </DesktopWindow>
+
+  <!-- Ventana / modal Música -->
+  <DesktopWindow id="music" title="Música" wide>
+    <div class="p-4">
+      <MusicPlayer />
+    </div>
+  </DesktopWindow>
+
 
   <DesktopWindow id="tech" title="Tecnologías">
     <TechStack />

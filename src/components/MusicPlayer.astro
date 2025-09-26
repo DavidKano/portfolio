@@ -1,0 +1,173 @@
+---
+/**
+ * Asegúrate de tener los MP3 en /public/music/
+ * Ej.: /public/music/EfectoPasillo.mp3, /public/music/ElCanijo.mp3, /public/music/Fito.mp3, /public/music/Astola.mp3
+ */
+const tracks = [
+  { title: "Efecto Pasillo — Cuando me siento bien", file: "/music/EfectoPasillo.mp3", author: "Efecto Pasillo" },
+  { title: "El Canijo de Jerez — Volar sin alas",     file: "/music/ElCanijo.mp3",      author: "El Canijo" },
+  { title: "Fito & Fitipaldis — Whisky barato",       file: "/music/Fito.mp3",          author: "Fito" },
+  { title: "Astola — Ermitaño",                        file: "/music/Astola.mp3",        author: "Astola" },
+];
+---
+
+<div id="music-root" class="w-full max-w-2xl mx-auto rounded-2xl shadow-xl bg-gray-900 text-white p-5"
+     data-tracks={JSON.stringify(tracks)}>
+  <div class="flex items-center gap-3 mb-4">
+    <div class="shrink-0 w-10 h-10 rounded-xl bg-gray-800 grid place-items-center">🎧</div>
+    <div>
+      <h2 class="text-xl font-bold">Música</h2>
+      <p class="text-xs text-gray-400">Tu banda sonora mientras exploras el portfolio</p>
+    </div>
+  </div>
+
+  <div id="diag" class="text-xs text-amber-300 mb-2"></div>
+  <div id="nowPlaying" class="mb-3 text-sm text-gray-300"></div>
+
+  <div class="flex items-center gap-3 mb-4">
+    <button type="button" id="prevBtn" class="px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700">⏮️</button>
+    <button type="button" id="playPauseBtn" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 font-semibold">▶️ Reproducir</button>
+    <button type="button" id="nextBtn" class="px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700">⏭️</button>
+    <input id="seek" type="range" min="0" max="100" value="0" class="flex-1 h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer" />
+    <span id="time" class="text-xs text-gray-400 w-16 text-right">0:00</span>
+  </div>
+
+  <div class="flex items-center gap-2 mb-4">
+    <span class="text-sm text-gray-400">Volumen</span>
+    <input id="volume" type="range" min="0" max="1" step="0.01" value="0.8" class="flex-1 h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer" />
+  </div>
+
+  <ul id="playlist" class="divide-y divide-gray-800 rounded-lg border border-gray-800">
+    {tracks.map((t, i) => (
+      <li class="p-3 hover:bg-gray-800 cursor-pointer flex items-center justify-between"
+          data-index={i} tabindex="0" role="button">
+        <div>
+          <p class="text-sm font-medium">{t.title}</p>
+          <p class="text-xs text-gray-400">{t.author}</p>
+        </div>
+        <span class="text-xs text-gray-500">▶️</span>
+      </li>
+    ))}
+  </ul>
+
+  <audio id="audio" preload="metadata"></audio>
+</div>
+
+<script is:inline>
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+  const root = $('#music-root');
+  const audio = $('#audio');
+  const playPauseBtn = $('#playPauseBtn');
+  const prevBtn = $('#prevBtn');
+  const nextBtn = $('#nextBtn');
+  const seek = $('#seek');
+  const time = $('#time');
+  const volume = $('#volume');
+  const nowPlaying = $('#nowPlaying');
+  const diag = $('#diag');
+  const playlist = $('#playlist');
+
+  let tracks = [];
+  let current = 0;
+  let isSeeking = false;
+
+  // Cargar pistas desde data-attribute (robusto)
+  try {
+    tracks = JSON.parse(root?.dataset?.tracks || '[]');
+  } catch (e) {
+    console.error('[MUSIC] Error parseando pistas', e);
+    diag.textContent = '❌ Error cargando la lista de pistas.';
+    tracks = [];
+  }
+
+  function formatTime(s) {
+    s = Math.floor(s || 0);
+    const m = Math.floor(s / 60);
+    const ss = (s % 60).toString().padStart(2, '0');
+    return `${m}:${ss}`;
+  }
+
+  function highlight() {
+    $$('#playlist li').forEach((li, i) => li.classList.toggle('bg-gray-800', i === current));
+  }
+
+  function load(index) {
+    if (!tracks.length) return;
+    current = (index + tracks.length) % tracks.length;
+    const t = tracks[current];
+    const url = new URL(t.file, window.location.origin).toString();
+    audio.src = url;
+    nowPlaying.textContent = `Reproduciendo: ${t.title} — ${t.author}`;
+    diag.textContent = `ℹ️ Cargando: ${url}`;
+    highlight();
+    seek.value = '0';
+    time.textContent = '0:00';
+    audio.load();
+  }
+
+  async function preflight() {
+    // Verifica 200/404
+    const lines = await Promise.all(tracks.map(async (t) => {
+      const url = new URL(t.file, window.location.origin).toString();
+      try {
+        const res = await fetch(url, { method: 'HEAD' });
+        return `${res.ok ? '✅' : '❌'} ${url} (${res.status})`;
+      } catch {
+        return `❌ ${url} (HEAD error)`;
+      }
+    }));
+    diag.innerHTML = lines.join(' · ');
+  }
+
+  playPauseBtn.addEventListener('click', async () => {
+    try {
+      if (!audio.src) load(current);
+      if (audio.paused) { await audio.play(); playPauseBtn.textContent = '⏸️ Pausar'; }
+      else { audio.pause(); playPauseBtn.textContent = '▶️ Reproducir'; }
+    } catch (err) {
+      nowPlaying.textContent = '⚠️ No se pudo reproducir. Revisa la ruta del MP3.';
+      console.error('[MUSIC] play() error:', err);
+    }
+  });
+
+  prevBtn.addEventListener('click', async () => { load(current - 1); try { await audio.play(); playPauseBtn.textContent='⏸️ Pausar'; } catch{} });
+  nextBtn.addEventListener('click', async () => { load(current + 1); try { await audio.play(); playPauseBtn.textContent='⏸️ Pausar'; } catch{} });
+
+  playlist.addEventListener('click', async (e) => {
+    const li = e.target.closest('li[data-index]'); if (!li) return;
+    load(Number(li.dataset.index));
+    try { await audio.play(); playPauseBtn.textContent='⏸️ Pausar'; } catch{}
+  });
+  playlist.addEventListener('keydown', async (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      const li = e.target.closest('li[data-index]'); if (!li) return;
+      load(Number(li.dataset.index));
+      try { await audio.play(); playPauseBtn.textContent='⏸️ Pausar'; } catch{}
+      e.preventDefault();
+    }
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration && !isSeeking) {
+      seek.value = String((audio.currentTime / audio.duration) * 100);
+      time.textContent = formatTime(audio.currentTime);
+    }
+  });
+  audio.addEventListener('ended', async () => { load(current + 1); try { await audio.play(); } catch{} });
+  audio.addEventListener('error', () => {
+    console.error('[MUSIC] audio error code:', audio?.error?.code, 'src:', audio.src);
+    nowPlaying.textContent = '⚠️ Error cargando el audio. Mira el diagnóstico.';
+  });
+
+  seek.addEventListener('input',  () => { isSeeking = true; });
+  seek.addEventListener('change', () => {
+    if (audio.duration) audio.currentTime = (Number(seek.value)/100) * audio.duration;
+    isSeeking = false;
+  });
+  volume.addEventListener('input', () => { audio.volume = Number(volume.value); });
+
+  if (tracks.length) { load(0); audio.volume = Number(volume.value || 0.8); preflight(); }
+  else { diag.textContent = '⚠️ No hay pistas configuradas.'; }
+</script>
