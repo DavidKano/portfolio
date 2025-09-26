@@ -1,6 +1,7 @@
 // music.js — inicia solo tras interacción, rutas absolutas
 (() => {
-  const scope = document.getElementById("win-musica");
+// Antes: const scope = document.getElementById("win-musica");
+const scope = document.getElementById("win-musica") || document.getElementById("music") || document.getElementById("music-scope");
   if (!scope) return;
 
   const audio = scope.querySelector("audio");

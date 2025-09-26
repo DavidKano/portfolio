@@ -1,6 +1,9 @@
 /*
   Content-Security-Policy: default-src 'self';
-   script-src 'self';
-    connect-src 'self' https://api.countapi.xyz;
+    script-src 'self';
+    style-src 'self' 'unsafe-inline';
     img-src 'self' data:;
-    style-src 'self';
+    font-src 'self' data:;
+    media-src 'self';
+    connect-src 'self' https://api.countapi.xyz;
+*/
