@@ -34,14 +34,40 @@
     }
   }
 
-  function openWindow(id) {
-    if (!id) return;
+    function openWindow(id) {
     const win = document.getElementById(id);
     if (!win) return;
-    win.classList.add("is-open", "is-centered");
+
+    // Resetea cualquier estilo inline previo que tire a esquina
+    win.style.left = "";
+    win.style.right = "";
+    win.style.top = "";
+    win.style.bottom = "";
+    win.style.transform = "";
+
+    // Abre y centra (el CSS !important se encarga)
+    win.classList.add("is-open");
+
+    // Trae al frente y, si desborda, lo ajusta sin romper el centrado X
     bringToFront(win);
-    requestAnimationFrame(() => clampToViewport(win));
-  }
+    requestAnimationFrame(() => {
+        const r = win.getBoundingClientRect();
+        const m = 8;
+        let left = r.left, top = r.top;
+
+        if (r.right > innerWidth - m) left = Math.max(m, innerWidth - r.width - m);
+        if (r.left < m) left = m;
+        if (r.bottom > innerHeight - m) top = Math.max(m, innerHeight - r.height - m);
+        if (r.top < m) top = m;
+
+        if (left !== r.left || top !== r.top) {
+        // Solo si hay desborde anulamos el translateX
+        win.style.transform = "none";
+        win.style.left = `${left}px`;
+        win.style.top = `${top}px`;
+        }
+    });
+    }
 
   function closeWindow(el) {
     const win = el.closest(".window, .ventana,[role='dialog']");

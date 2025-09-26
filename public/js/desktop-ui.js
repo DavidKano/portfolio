@@ -8,6 +8,7 @@ const setTitle = (w) => { if(!w) return; document.title = `David Cano — ${w.da
 function openWindow(id){
 const win = document.getElementById(id);
 if(!win) return;
+
 closeAll();
 win.classList.remove('hidden');
 location.hash = id;

@@ -127,18 +127,20 @@ border: 1px solid rgba(255,255,255,.08);
 
 /* ==== Ventanas tipo escritorio ==== */
 .window {
-  position: fixed;            /* clave para que no se vaya abajo-izquierda en Netlify */
-  display: none;              /* cerrada por defecto */
-  min-width: 320px;
+  position: fixed !important;
+  inset: auto !important;          /* anula top/right/bottom/left heredados */
   max-width: min(92vw, 900px);
   max-height: min(86vh, 900px);
-  background: #ffffff;
-  border: 1px solid #d0d0d0;
-  box-shadow: 0 18px 40px rgba(0,0,0,.18);
-  border-radius: 10px;
-  overflow: hidden;
-  box-sizing: border-box;
-  z-index: 10;
+  z-index: 20;
+}
+
+.window.is-open {
+  display: block !important;
+  left: 50% !important;
+  top: 12% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translateX(-50%) !important;
 }
 
 .window__titlebar {
