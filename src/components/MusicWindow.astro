@@ -1,0 +1,17 @@
+---
+// src/components/MusicWindow.astro
+---
+<div class="window hidden" id="win-musica" data-title="Música" role="dialog" aria-modal="true">
+  <div class="window__titlebar">
+    <div class="window__title">Música</div>
+    <button class="window__btn" data-close title="Cerrar">×</button>
+  </div>
+  <div class="window__content">
+    <p id="musicStatus">Pulsa “Reproducir” o elige una canción.</p>
+    <div class="flex items-center gap-3 mb-3">
+      <button id="musicPlayAll" class="window__btn" style="width:auto;padding:6px 12px;">▶ Reproducir</button>
+      <audio controls preload="none" playsinline class="w-[260px]"></audio>
+    </div>
+    <ul id="musicList" class="list-none p-0 m-0"></ul>
+  </div>
+</div>

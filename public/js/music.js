@@ -1,54 +1,56 @@
-// public/js/music.js
+// music.js — inicia solo tras interacción, rutas absolutas
 (() => {
-  const audio = document.querySelector("#win-musica audio");
-  const list = document.querySelector("#win-musica #musicList");
-  const playBtn = document.querySelector("#win-musica #musicPlayAll");
-  const status = document.querySelector("#win-musica #musicStatus");
+  const scope = document.getElementById("win-musica");
+  if (!scope) return;
 
-  if (!audio || !list || !playBtn || !status) return;
+  const audio = scope.querySelector("audio");
+  const list  = scope.querySelector("#musicList");
+  const play  = scope.querySelector("#musicPlayAll");
+  const status= scope.querySelector("#musicStatus");
 
-  // Permite override desde la página:
-  const TRACKS = (window.MUSIC_TRACKS && Array.isArray(window.MUSIC_TRACKS) && window.MUSIC_TRACKS.length)
+  if (!audio || !list || !play || !status) return;
+
+  const TRACKS = Array.isArray(window.MUSIC_TRACKS) && window.MUSIC_TRACKS.length
     ? window.MUSIC_TRACKS
-    : [
-        { title: "Tema 1", src: "/assets/music/tema1.mp3" },
-        { title: "Tema 2", src: "/assets/music/tema2.mp3" },
-        { title: "Tema 3", src: "/assets/music/tema3.mp3" },
-      ];
+    : [{ title:"Demo", src:"/assets/music/demo.mp3" }];
 
-  list.innerHTML = "";
-  TRACKS.forEach((t, i) => {
+  // Pintar lista
+  list.textContent = "";
+  TRACKS.forEach((t,i) => {
     const li = document.createElement("li");
-    li.style.cursor = "pointer";
-    li.style.padding = "6px 8px";
-    li.textContent = t.title;
+    li.className = "cursor-pointer py-2 px-2 hover:opacity-80";
     li.dataset.index = String(i);
+    li.textContent = t.title;
     list.appendChild(li);
   });
 
   let current = 0;
-  function load(i) {
+  function load(i){
     current = i;
-    const tr = TRACKS[current];
-    audio.src = tr.src;
-    status.textContent = `Reproduciendo: ${tr.title}`;
+    audio.src = TRACKS[current].src;   // solo URLs absolutas /assets/...
+    status.textContent = `Reproduciendo: ${TRACKS[current].title}`;
   }
-  function play() {
+  function playNow(){
+    audio.load();
     audio.play().catch(err => {
-      status.textContent = "Toca “Reproducir” o elige una canción.";
-      console.log("Autoplay bloqueado hasta interacción:", err);
+      status.textContent = "Toca Reproducir o elige una canción.";
+      console.log("Bloqueado por autoplay hasta gesto:", err?.message || err);
     });
   }
 
-  playBtn.addEventListener("click", () => { load(0); play(); });
-  list.addEventListener("click", (e) => {
+  play.addEventListener("click", ()=>{ load(0); playNow(); });
+  list.addEventListener("click",(e)=>{
     const li = e.target.closest("li");
     if (!li) return;
-    load(Number(li.dataset.index || 0));
-    play();
+    load(Number(li.dataset.index||0)); playNow();
   });
-  audio.addEventListener("ended", () => {
+
+  audio.addEventListener("error", ()=>{
+    status.textContent = "No se pudo cargar el audio (revisa la ruta en Netlify).";
+    console.warn("Audio error", audio.error, "src:", audio.currentSrc);
+  });
+  audio.addEventListener("ended", ()=>{
     const next = (current + 1) % TRACKS.length;
-    load(next); play();
+    load(next); playNow();
   });
 })();
