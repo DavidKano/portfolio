@@ -8,7 +8,6 @@ import Projects from "../components/Projects.astro";
 import TechStack from "../components/TechStack.astro";
 import Contacto from "../components/Contacto.astro";
 import Certificaciones from "../components/Certificaciones.astro";
-import MusicPlayer from "../components/MusicPlayer.astro";
 import Layout from '../layouts/Layout.astro';
 
 
@@ -37,8 +36,7 @@ import Layout from '../layouts/Layout.astro';
       </svg>
     </DesktopIcon>
 
-  <!-- Icono estilo escritorio -->
-    <DesktopIcon id="music" label="Música" kind="app" img="/icons/music.png" />
+ 
     
     <!-- Google Play (puedes cambiar href) -->
     <DesktopIcon id="google" label="Google Play" href="https://play.google.com/store/apps/developer?id=David+Cano&hl=es"  img="/icons/jugar.png" />
@@ -56,18 +54,7 @@ import Layout from '../layouts/Layout.astro';
     <Projects />
   </DesktopWindow>
 
-   <!-- Ventana / modal Música -->
-  <DesktopWindow id="music" title="Música" wide>
-    <div class="p-4 space-y-3" id="music-scope">
-      <p id="musicStatus">Pulsa “Reproducir” o elige una canción.</p>
-      <div class="flex items-center gap-3 mb-3">
-        <button id="musicPlayAll" class="window__btn px-3 py-1">▶ Reproducir</button>
-        <audio controls preload="none" playsinline class="w-[260px]"></audio>
-      </div>
-      <ul id="musicList" class="list-none p-0 m-0"></ul>
-    </div>
-  </DesktopWindow>
-
+   
 
 
   <DesktopWindow id="tech" title="Tecnologías">

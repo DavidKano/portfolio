@@ -196,31 +196,7 @@ border: 1px solid rgba(255,255,255,.08);
 }
 .desktop-icon__label { font-size: 13px; line-height: 1.2; }
 
-/* Player UI */
-.music-controls{
-  display:grid; grid-template-columns:auto auto auto 1fr 160px; gap:10px; align-items:center;
-}
-.mc-btn{
-  height:34px; min-width:42px; padding:0 10px; border:1px solid rgba(255,255,255,.12);
-  border-radius:10px; background:rgba(255,255,255,.06); color:#e5e7eb; cursor:pointer;
-}
-.mc-btn:hover{ background:rgba(255,255,255,.12); }
-.mc-btn--primary{ border-color:rgba(59,130,246,.35); background:rgba(59,130,246,.2); }
 
-.mc-range{ -webkit-appearance:none; appearance:none; height:6px; border-radius:999px; background:rgba(255,255,255,.15); }
-.mc-range::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:16px; height:16px; border-radius:999px; background:#fff; border:2px solid rgba(0,0,0,.25); }
-.mc-range.seek{ width:100%; }
-.mc-range.vol{ width:160px; }
-
-.music-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; }
-.music-item{
-  display:flex; align-items:center; justify-content:space-between; gap:12px;
-  padding:10px 12px; border-radius:12px; cursor:pointer; background:transparent; color:#e5e7eb;
-}
-.music-item:hover{ background:rgba(255,255,255,.06); }
-.music-item__title{ font-size:14px; }
-.music-item__meta{ font-size:12px; opacity:.65; }
-.music-item.is-active{ background:rgba(59,130,246,.18); border:1px solid rgba(59,130,246,.35); }
 
 /* Centrado seguro para ventanas tipo .win (fallback robusto) */
 .win {
