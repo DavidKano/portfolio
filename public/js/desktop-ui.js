@@ -52,7 +52,7 @@
     const win = closer.closest(WIN_SELECTOR);
     if (win?.id) closeWindow(win.id);
   }
-}, { passive: false });
+} );
 
   // Traer al frente al interactuar
   document.addEventListener("mousedown", (e) => {

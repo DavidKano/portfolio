@@ -221,3 +221,12 @@ border: 1px solid rgba(255,255,255,.08);
 .music-item__title{ font-size:14px; }
 .music-item__meta{ font-size:12px; opacity:.65; }
 .music-item.is-active{ background:rgba(59,130,246,.18); border:1px solid rgba(59,130,246,.35); }
+
+/* Centrado seguro para ventanas tipo .win (fallback robusto) */
+.win {
+  position: fixed;           /* asegura sacarlas del flujo */
+  left: 50%;
+  top: 12%;
+  transform: translateX(-50%);
+}
+.win.is-open { display: block; } /* por si alguna arranca oculta */
