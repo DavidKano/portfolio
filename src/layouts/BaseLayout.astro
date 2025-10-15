@@ -1,0 +1,15 @@
+---
+import "../styles/tailwind.css";
+const { title = "David Cano — Product designer & front end developer", description = "Portfolio" } = Astro.props;
+---
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+  <body class="bg-white text-zinc-900 antialiased">
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,62 @@
+---
+const certs = [
+  {
+    title: "IT Specialist — Databases",
+    org: "Certiport (Pearson VUE)",
+    date: "Expedición: Jun. 2025 · Venc.: Jun. 2030",
+    skills: "Bases de datos, Data Storage",
+    logo: "/certs/databases.png",
+    credential: "/Cert50285416545.pdf",
+  },
+  {
+    title: "IT Specialist — Java",
+    org: "Certiport (Pearson VUE)",
+    date: "Expedición: Jun. 2025 · Venc.: Jun. 2030",
+    skills: "Java",
+    logo: "/certs/java.png",
+    credential: "/Cert10285437213.pdf",
+  },
+  {
+    title: "Unity Certified User: Artist",
+    org: "Unity",
+    date: "Expedición: Jun. 2025 · Venc.: Jun. 2030",
+    skills: "",
+    logo: "/certs/artist.png",
+    credential: "/Cert39085445807.pdf",
+  },
+  {
+    title: "Unity Certified User: Programmer",
+    org: "Unity",
+    date: "Expedición: Jun. 2025 · Venc.: Jun. 2030",
+    skills: "C#",
+    logo: "/certs/programmer.png",
+    credential: "/Cert83285454762.pdf",
+  },
+];
+---
+<section id="certificaciones" class="py-16">
+  <div class="mx-auto max-w-6xl px-6">
+    <h2 class="text-center text-2xl md:text-3xl font-bold">🎓 Certificaciones</h2>
+
+    <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+      {certs.map((c) => (
+        <article class="rounded-xl bg-white ring-1 ring-zinc-200 shadow-sm p-5 flex gap-4">
+          <div class="shrink-0 w-24 h-24 rounded-lg bg-zinc-50 ring-1 ring-zinc-200 overflow-hidden grid place-items-center">
+            <img src={c.logo} alt={c.title} class="max-h-20 max-w-full object-contain" loading="lazy" />
+          </div>
+          <div class="min-w-0">
+            <h3 class="text-lg font-semibold leading-tight">{c.title}</h3>
+            <p class="text-sm text-zinc-600">{c.org}</p>
+            <p class="text-sm text-zinc-600 mt-1">{c.date}</p>
+            {c.skills && <p class="text-xs text-zinc-500 mt-1 italic">Aptitudes: {c.skills}</p>}
+            {c.credential && (
+              <a href={c.credential} target="_blank" class="inline-flex items-center gap-1 mt-3 text-sm text-zinc-800 hover:underline">
+                Ver credencial <span aria-hidden>→</span>
+              </a>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

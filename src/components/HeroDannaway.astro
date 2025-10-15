@@ -1,0 +1,74 @@
+---
+const leftDesc  = "Tecnico Superior en Apps Multiplataforma & Tecnico en Sistemas Informaticos y Redes.";
+const rightDesc = "Desarrollador front-end & back-end que escribe código limpio y eficiente.";
+---
+<section class="relative bg-white">
+  <div class="mx-auto max-w-6xl px-6 pt-12 md:pt-16 pb-10 md:pb-12">
+    <!-- 🟩 Tres columnas: [designer] [FOTO] [coder] -->
+    <div id="face" class="grid grid-cols-1 lg:grid-cols-12 items-center gap-8" data-mode="designer">
+      
+      <!-- designer (izquierda) -->
+      <a href="/portfolio" class="lg:col-span-4 order-2 lg:order-1 text-center lg:text-left">
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-zinc-900">David Cano</h1>
+        <p class="mt-3 text-zinc-600 max-w-sm mx-auto lg:mx-0">{leftDesc}</p>
+      </a>
+
+     <!-- FOTO en el centro -->
+<div class="lg:col-span-4 order-1 lg:order-2 relative w-full max-w-[560px] mx-auto bg-white">
+  <!-- Foto base: gris + máscara para fundir con blanco -->
+  <img
+    src="/hero.png"
+    alt="David Cano"
+    class="w-full h-auto select-none
+           grayscale contrast-[1.05] brightness-[1.03]
+            [mask-image:radial-gradient(130%_100%_at_50%_40%,_black_66%,_transparent_90%)]
+           [-webkit-mask-image:radial-gradient(120%_95%_at_50%_38%,_black_62%,_transparent_85%)]" />
+
+  <!-- Mitad izquierda: textura pintura a color -->
+  <div class="pointer-events-none absolute inset-0 mix-blend-multiply opacity-95"
+       style="
+         clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+         background-image: url('/paint-texture.png');
+         background-size: cover; background-position: center;">
+  </div>
+
+  <!-- Línea central -->
+  <div class="absolute inset-y-0 left-1/2 -translate-x-1/2 w-[2px] bg-zinc-200/70"></div>
+</div>
+
+
+      <!-- coder (derecha) -->
+      <a href="/" class="lg:col-span-4 order-3 text-center lg:text-left">
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-zinc-900">
+          <span class="select-none">&lt;</span>Desarrollador<span class="select-none">&gt;</span>
+        </h1>
+        <p class="mt-3 text-zinc-600 max-w-sm mx-auto lg:mx-0">{rightDesc}</p>
+
+        <!-- “código” de fondo muy suave (como en el original) -->
+        <div class="relative mt-6 hidden md:block">
+          <div class="absolute -z-10 -left-6 -top-6 text-zinc-400/20 leading-snug text-sm font-mono select-none">
+{`<html>
+  <body>
+    <div class="jedi">
+      CSS3  HTML5
+      color:#000;  jQuery();
+    </div>
+  </body>
+</html>`}
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="h-px w-full bg-zinc-200"></div>
+
+  <!-- Cambio de modo al mover el ratón (como el original) -->
+  <script>
+    const face = document.getElementById('face');
+    face?.addEventListener('mousemove', (e) => {
+      const r = face.getBoundingClientRect();
+      face.dataset.mode = (e.clientX - r.left) < r.width / 2 ? 'designer' : 'coder';
+    });
+    face?.addEventListener('mouseleave', () => face.dataset.mode = 'designer');
+  </script>
+</section>

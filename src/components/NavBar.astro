@@ -1,0 +1,87 @@
+---
+import { Astro } from "astro";
+
+const NAV = [
+  { href: "/",            label: "inicio",     exact: true  }, // luego /about si prefieres
+  { href: "/learn",       label: "Certificaciones"                  },
+  { href: "/portfolio",   label: "tecnologias"              },
+  { href: "/cv",        label: "CV"                   },
+  { href: "/contact",     label: "contacto"                },
+];
+
+const SOCIAL = [
+ // { href: "https://x.com",                                        label: "twitter"  },
+  { href: "https://www.linkedin.com/in/david-cano-jaramillo-6bb1b017b/", label: "linkedin" },
+  { href: "https://github.com/DavidKano",                         label: "github"   },
+  { href: "https://play.google.com/store/apps/developer?id=David+Cano&hl=es",                           label: "Google Play"},
+];
+
+const isActive = (itemHref: string, exact = false) => {
+  const path = Astro.url.pathname.replace(/\/+$/,"") || "/";
+  const target = itemHref.replace(/\/+$/,"") || "/";
+  return exact ? path === target : path.startsWith(target) && target !== "/";
+};
+---
+<header class="sticky top-0 z-50 w-full bg-black text-white">
+  <div class="mx-auto max-w-6xl h-12 md:h-14 px-4 md:px-6 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2" aria-label="Inicio">
+      <img src="/logo-dc.png" alt="DC" class="h-7 w-7" />
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex items-center gap-6 text-[13px] leading-none">
+      {NAV.map(({ href, label, exact }) => (
+        <a href={href}
+           class={`uppercase tracking-wide transition hover:text-zinc-300 ${isActive(href, exact) ? "text-white" : "text-zinc-300/80"}`}>
+          {label}
+        </a>
+      ))}
+      <span class="mx-1 text-zinc-700">|</span>
+      <ul class="flex items-center gap-4">
+        {SOCIAL.map(s => (
+          <li>
+            <a href={s.href} target="_blank" rel="noopener noreferrer"
+               class="capitalize text-zinc-300/80 hover:text-white transition">{s.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Mobile button -->
+    <button id="nav-toggle"
+            class="md:hidden inline-flex items-center justify-center rounded-md px-3 py-2 text-sm bg-white/10 hover:bg-white/15"
+            aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menú">
+      menu
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="md:hidden hidden border-t border-white/10">
+    <nav class="mx-auto max-w-6xl px-4 py-3 flex flex-col gap-2 text-sm">
+      {NAV.map(({ href, label, exact }) => (
+        <a href={href}
+           class={`py-1 transition ${isActive(href, exact) ? "text-white" : "text-zinc-300/90 hover:text-white"}`}>
+          {label}
+        </a>
+      ))}
+      <div class="h-px bg-white/10 my-2"></div>
+      <div class="flex flex-wrap gap-x-4 gap-y-2">
+        {SOCIAL.map(s => (
+          <a href={s.href} target="_blank" rel="noopener" class="capitalize text-zinc-300/90 hover:text-white">
+            {s.label}
+          </a>
+        ))}
+      </div>
+    </nav>
+  </div>
+
+  <script>
+    const btn = document.getElementById('nav-toggle');
+    const menu = document.getElementById('mobile-menu');
+    btn?.addEventListener('click', () => {
+      const open = menu?.classList.toggle('hidden') === false;
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  </script>
+</header>
