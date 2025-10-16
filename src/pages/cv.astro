@@ -35,18 +35,21 @@ const CV_URL = "/cv.pdf";
     </section>
 
     <!-- Visor embebido -->
-    <section class="mx-auto max-w-6xl px-6 pb-12">
-      <div class="rounded-xl ring-1 ring-zinc-200 overflow-hidden bg-white">
-        <iframe
-          src={`${CV_URL}#view=FitH`}
-          title="CV de David Cano"
-          class="w-full h-[75vh]"
-        ></iframe>
-      </div>
-      <p class="mt-3 text-center text-sm text-zinc-500">
-        Si no se muestra el visor, <a class="underline" href={CV_URL} target="_blank" rel="noopener">haz clic aquí para abrir el PDF</a>.
+   <section class="mx-auto max-w-6xl px-6 pb-12">
+  <div class="rounded-xl ring-1 ring-zinc-200 overflow-hidden bg-white">
+    <object
+      data="/cv.pdf#view=FitH"
+      type="application/pdf"
+      class="w-full h-[75vh]"
+    >
+      <p class="p-6 text-center text-zinc-600">
+        No se pudo mostrar el PDF embebido.
+        <a href="/cv.pdf" target="_blank" rel="noopener" class="underline">Ábrelo aquí</a> o usa el botón Descargar.
       </p>
-    </section>
+    </object>
+  </div>
+</section>
+
   </main>
 
   <SiteFooter />
