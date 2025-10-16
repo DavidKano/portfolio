@@ -1,35 +1,31 @@
 ---
-import { Astro } from "astro";
-
 const NAV = [
-  { href: "/",            label: "inicio",     exact: true  }, // luego /about si prefieres
-  { href: "/learn",       label: "Certificaciones"                  },
-  { href: "/portfolio",   label: "tecnologias"              },
-  { href: "/cv",        label: "CV"                   },
-  { href: "/contact",     label: "contacto"                },
+  { href: "/",            label: "inicio", exact: true },
+  { href: "/learn",       label: "certificaciones" },
+  { href: "/portfolio",   label: "tecnologias" },
+  { href: "/cv",          label: "cv" },
+  { href: "/contact",     label: "contacto" },
 ];
 
 const SOCIAL = [
- // { href: "https://x.com",                                        label: "twitter"  },
   { href: "https://www.linkedin.com/in/david-cano-jaramillo-6bb1b017b/", label: "linkedin" },
-  { href: "https://github.com/DavidKano",                         label: "github"   },
-  { href: "https://play.google.com/store/apps/developer?id=David+Cano&hl=es",                           label: "Google Play"},
+  { href: "https://github.com/DavidKano",                                 label: "github"   },
+  { href: "https://play.google.com/store/apps/developer?id=David+Cano",   label: "google play" },
 ];
 
-const isActive = (itemHref: string, exact = false) => {
+const isActive = (href, exact = false) => {
   const path = Astro.url.pathname.replace(/\/+$/,"") || "/";
-  const target = itemHref.replace(/\/+$/,"") || "/";
-  return exact ? path === target : path.startsWith(target) && target !== "/";
+  const target = href.replace(/\/+$/,"") || "/";
+  return exact ? path === target : (target !== "/" && path.startsWith(target)) || (target === "/" && path === "/");
 };
 ---
 <header class="sticky top-0 z-50 w-full bg-black text-white">
   <div class="mx-auto max-w-6xl h-12 md:h-14 px-4 md:px-6 flex items-center justify-between">
-    <!-- Logo -->
     <a href="/" class="flex items-center gap-2" aria-label="Inicio">
       <img src="/logo-dc.png" alt="DC" class="h-7 w-7" />
     </a>
 
-    <!-- Desktop nav -->
+    <!-- Desktop -->
     <nav class="hidden md:flex items-center gap-6 text-[13px] leading-none">
       {NAV.map(({ href, label, exact }) => (
         <a href={href}
@@ -40,59 +36,37 @@ const isActive = (itemHref: string, exact = false) => {
       <span class="mx-1 text-zinc-700">|</span>
       <ul class="flex items-center gap-4">
         {SOCIAL.map(s => (
-          <li>
-            <a href={s.href} target="_blank" rel="noopener noreferrer"
-               class="capitalize text-zinc-300/80 hover:text-white transition">{s.label}</a>
-          </li>
+          <li><a href={s.href} target="_blank" rel="noopener" class="capitalize text-zinc-300/80 hover:text-white">{s.label}</a></li>
         ))}
       </ul>
     </nav>
 
-    <!-- Mobile button -->
-    <button id="nav-toggle" type="button"
-    class="md:hidden inline-flex items-center justify-center rounded-md px-3 py-2 text-sm bg-white/10 hover:bg-white/15"
-    aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menú">
-  menu
-  </button>
-  </div>
-
-  <!-- Mobile menu -->
-  <div id="mobile-menu" class="md:hidden hidden border-t border-white/10">
-    <nav class="mx-auto max-w-6xl px-4 py-3 flex flex-col gap-2 text-sm">
-      {NAV.map(({ href, label, exact }) => (
-        <a href={href}
-           class={`py-1 transition ${isActive(href, exact) ? "text-white" : "text-zinc-300/90 hover:text-white"}`}>
-          {label}
-        </a>
-      ))}
-      <div class="h-px bg-white/10 my-2"></div>
-      <div class="flex flex-wrap gap-x-4 gap-y-2">
-        {SOCIAL.map(s => (
-          <a href={s.href} target="_blank" rel="noopener" class="capitalize text-zinc-300/90 hover:text-white">
-            {s.label}
-          </a>
-        ))}
+    <!-- Mobile (JS-free) -->
+    <details class="md:hidden relative">
+      <summary class="list-none inline-flex items-center rounded-md px-3 py-2 text-sm bg-white/10 hover:bg-white/15 cursor-pointer select-none">
+        menú
+      </summary>
+      <div class="absolute right-0 mt-2 min-w-56 rounded-lg bg-black/95 ring-1 ring-white/10 p-3">
+        <nav class="flex flex-col">
+          {NAV.map(({ href, label, exact }) => (
+            <a href={href}
+               class={`py-2 px-2 rounded text-sm transition ${
+                 isActive(href, exact) ? "text-white" : "text-zinc-300/90 hover:text-white hover:bg-white/10"
+               }`}>
+              {label}
+            </a>
+          ))}
+          <div class="my-2 h-px bg-white/10"></div>
+          <div class="flex flex-col">
+            {SOCIAL.map(s => (
+              <a href={s.href} target="_blank" rel="noopener"
+                 class="py-2 px-2 rounded text-sm text-zinc-300/90 hover:text-white hover:bg-white/10 capitalize">
+                {s.label}
+              </a>
+            ))}
+          </div>
+        </nav>
       </div>
-    </nav>
+    </details>
   </div>
-
- <script is:inline>
-  const btn = document.getElementById('nav-toggle');
-  const menu = document.getElementById('mobile-menu');
-
-  function toggle() {
-    if (!menu) return;
-    const hidden = menu.classList.toggle('hidden');
-    btn?.setAttribute('aria-expanded', String(!hidden));
-  }
-
-  btn?.addEventListener('click', toggle);
-
-  // Cierra al navegar (opcional)
-  menu?.addEventListener('click', (e) => {
-    const t = e.target;
-    if (t && t.tagName === 'A') toggle();
-  });
-</script>
-
 </header>
