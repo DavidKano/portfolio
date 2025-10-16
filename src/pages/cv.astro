@@ -37,18 +37,65 @@ const CV_URL = "/cv.pdf";
     <!-- Visor embebido -->
    <section class="mx-auto max-w-6xl px-6 pb-12">
   <div class="rounded-xl ring-1 ring-zinc-200 overflow-hidden bg-white">
-    <object
-      data="/cv.pdf#view=FitH"
-      type="application/pdf"
-      class="w-full h-[75vh]"
-    >
-      <p class="p-6 text-center text-zinc-600">
-        No se pudo mostrar el PDF embebido.
-        <a href="/cv.pdf" target="_blank" rel="noopener" class="underline">Ábrelo aquí</a> o usa el botón Descargar.
-      </p>
-    </object>
+    <!-- 1ª opción: <embed> nativo -->
+    <embed id="cv-embed"
+           src="/cv.pdf#view=FitH"
+           type="application/pdf"
+           class="w-full h-[75vh]"
+           />
+
+    <!-- Fallback visible si falla todo -->
+    <div id="cv-fallback" class="hidden p-6 text-center text-zinc-600">
+      No se pudo mostrar el PDF embebido.
+      <a href="/cv.pdf" target="_blank" rel="noopener" class="underline">Ábrelo aquí</a>
+      o usa el botón Descargar.
+    </div>
   </div>
+
+  <script is:inline>
+    // Si el navegador no soporta <embed> con PDF, cambiamos a Google Viewer.
+    (function () {
+      const origin = location.origin || (location.protocol + '//' + location.host);
+      const fileUrl = origin + '/cv.pdf';
+      const embed = document.getElementById('cv-embed');
+      const fallback = document.getElementById('cv-fallback');
+
+      // Algunos navegadores no lanzan error; probamos a cargar y, si no hay documento, usamos viewer externo.
+      let switched = false;
+      function useGoogleViewer() {
+        if (switched) return;
+        switched = true;
+        // Google Docs Viewer (sólo si el PDF es accesible públicamente)
+        embed.setAttribute('src', 'https://docs.google.com/gview?embedded=1&url=' + encodeURIComponent(fileUrl));
+      }
+
+      // Si en 1.2s no se ha renderizado nada, forzamos viewer alternativo
+      setTimeout(() => {
+        try {
+          // En la mayoría de casos con soporte, el <embed> ya muestra contenido.
+          // Si el contenedor sigue vacío (algunos navegadores), probamos el viewer externo.
+          const hasSize = embed && embed.clientHeight > 0 && embed.clientWidth > 0;
+          if (!hasSize) useGoogleViewer();
+        } catch (e) {
+          useGoogleViewer();
+        }
+      }, 1200);
+
+      // Como último recurso, mostramos fallback textual
+      // (por si Google Viewer también estuviera bloqueado)
+      setTimeout(() => {
+        // Si no hay ninguna navegación visible (altura ~0), mostramos fallback
+        const height = embed?.clientHeight || 0;
+        const iframeMode = embed?.tagName === 'IFRAME'; // por si el navegador lo transforma
+        if ((!height || height < 50) && !iframeMode) {
+          embed.classList.add('hidden');
+          fallback?.classList.remove('hidden');
+        }
+      }, 2500);
+    })();
+  </script>
 </section>
+
 
   </main>
 

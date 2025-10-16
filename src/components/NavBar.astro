@@ -49,11 +49,11 @@ const isActive = (itemHref: string, exact = false) => {
     </nav>
 
     <!-- Mobile button -->
-    <button id="nav-toggle"
-            class="md:hidden inline-flex items-center justify-center rounded-md px-3 py-2 text-sm bg-white/10 hover:bg-white/15"
-            aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menú">
-      menu
-    </button>
+    <button id="nav-toggle" type="button"
+    class="md:hidden inline-flex items-center justify-center rounded-md px-3 py-2 text-sm bg-white/10 hover:bg-white/15"
+    aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menú">
+  menu
+  </button>
   </div>
 
   <!-- Mobile menu -->
@@ -76,12 +76,23 @@ const isActive = (itemHref: string, exact = false) => {
     </nav>
   </div>
 
-  <script>
-    const btn = document.getElementById('nav-toggle');
-    const menu = document.getElementById('mobile-menu');
-    btn?.addEventListener('click', () => {
-      const open = menu?.classList.toggle('hidden') === false;
-      btn.setAttribute('aria-expanded', String(open));
-    });
-  </script>
+ <script is:inline>
+  const btn = document.getElementById('nav-toggle');
+  const menu = document.getElementById('mobile-menu');
+
+  function toggle() {
+    if (!menu) return;
+    const hidden = menu.classList.toggle('hidden');
+    btn?.setAttribute('aria-expanded', String(!hidden));
+  }
+
+  btn?.addEventListener('click', toggle);
+
+  // Cierra al navegar (opcional)
+  menu?.addEventListener('click', (e) => {
+    const t = e.target;
+    if (t && t.tagName === 'A') toggle();
+  });
+</script>
+
 </header>
